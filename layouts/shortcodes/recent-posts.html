@@ -1,0 +1,13 @@
+{{- /* Lista los writeups más recientes reutilizando post-card.html.
+       Uso: {{< recent-posts limit="4" >}} */ -}}
+{{- $limit := int (default 5 (.Get "limit")) -}}
+{{- $posts := where site.RegularPages "Section" "posts" -}}
+{{- with $posts }}
+<ul class="post-list">
+  {{ range first $limit . }}
+    {{ partial "post-card.html" . }}
+  {{ end }}
+</ul>
+{{- else }}
+<p class="empty">{{ if eq site.Language.Lang "es" }}Todavía no hay writeups publicados.{{ else }}No writeups published yet.{{ end }}</p>
+{{- end }}

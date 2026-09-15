@@ -1,0 +1,10 @@
+<footer class="site-footer">
+  <div class="wrap wrap-wide">
+    <span>&copy; {{ now.Year }} {{ site.Params.author }}, Domain Security</span>
+    <span class="links">
+      <a href="{{ site.Home.RelPermalink }}posts/">{{ if eq site.Language.Lang "es" }}Writeups{{ else }}Writeups{{ end }}</a>
+      {{ with site.GetPage "/legal" }}<a href="{{ .RelPermalink }}">{{ .Title }}</a>{{ end }}
+      {{ with site.Params.github }}<a href="{{ . }}" target="_blank" rel="noopener">GitHub</a>{{ end }}
+    </span>
+  </div>
+</footer>

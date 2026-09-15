@@ -1,0 +1,95 @@
+{{ define "main" }}
+{{- $services := site.GetPage "/services" -}}
+{{- $about := site.GetPage "/about" -}}
+{{- $portfolio := site.GetPage "/portfolio" -}}
+{{- $contact := site.GetPage "/contact" -}}
+{{- $posts := where site.RegularPages "Section" "posts" -}}
+{{- $es := eq site.Language.Lang "es" -}}
+
+  <section class="hero">
+    <div class="hero-text">
+      <h1>{{ .Params.hero.headline }}</h1>
+      <p class="lead">{{ .Params.hero.lead }}</p>
+      <div class="btn-row">
+        {{ with $contact }}<a class="btn btn-primary" href="{{ .RelPermalink }}">{{ $.Params.hero.cta_primary }}</a>{{ end }}
+        {{ with $services }}<a class="btn btn-secondary" href="{{ .RelPermalink }}">{{ $.Params.hero.cta_secondary }}</a>{{ end }}
+      </div>
+    </div>
+    {{ partial "hero-graph.html" . }}
+  </section>
+
+  <section class="home-section" aria-labelledby="services-heading">
+    <div class="section-head">
+      <span class="eyebrow">{{ .Params.services.eyebrow }}</span>
+      <h2 id="services-heading">{{ .Params.services.title }}</h2>
+      <p>{{ .Params.services.intro }}</p>
+    </div>
+    <ul class="card-grid">
+      {{ range .Params.services.items }}
+        <li class="card">
+          <h3>{{ .title }}</h3>
+          <p>{{ .summary }}</p>
+          <p class="card-for"><strong>{{ if $es }}Para quién{{ else }}Who it is for{{ end }}:</strong> {{ .audience }}</p>
+        </li>
+      {{ end }}
+    </ul>
+    {{ with $services }}<a class="see-all" href="{{ .RelPermalink }}">{{ $.Params.services.link_label }}</a>{{ end }}
+  </section>
+
+  <section class="home-section" aria-labelledby="method-heading">
+    <div class="section-head">
+      <span class="eyebrow">{{ .Params.method.eyebrow }}</span>
+      <h2 id="method-heading">{{ .Params.method.title }}</h2>
+      <p>{{ .Params.method.intro }}</p>
+    </div>
+    <div class="method-grid">
+      {{ range .Params.method.steps }}
+        <div class="method-step">
+          <h3>{{ .title }}</h3>
+          <p>{{ .body }}</p>
+        </div>
+      {{ end }}
+    </div>
+  </section>
+
+  <section class="home-section" aria-labelledby="portfolio-heading">
+    <div class="section-head">
+      <span class="eyebrow">{{ .Params.portfolio.eyebrow }}</span>
+      <h2 id="portfolio-heading">{{ .Params.portfolio.title }}</h2>
+      <p>{{ .Params.portfolio.intro }}</p>
+    </div>
+    {{ with $posts }}
+      <ul class="post-list">
+        {{ range first 3 . }}
+          {{ partial "post-card.html" . }}
+        {{ end }}
+      </ul>
+    {{ end }}
+    {{ with $portfolio }}
+      <a class="feature-card" href="{{ .RelPermalink }}">
+        <h3>{{ $.Params.portfolio.report.title }}</h3>
+        <p>{{ $.Params.portfolio.report.summary }}</p>
+        <span class="more">{{ $.Params.portfolio.report.more }}</span>
+      </a>
+    {{ end }}
+    <p><a class="see-all" href="{{ site.Home.RelPermalink }}posts/">{{ .Params.portfolio.all_label }}</a></p>
+  </section>
+
+  <section class="home-section" aria-labelledby="about-heading">
+    <div class="section-head">
+      <span class="eyebrow">{{ .Params.about.eyebrow }}</span>
+      <h2 id="about-heading">{{ .Params.about.title }}</h2>
+    </div>
+    <p class="section-body">{{ .Params.about.body }}</p>
+    {{ with $about }}<a class="see-all" href="{{ .RelPermalink }}">{{ $.Params.about.link_label }}</a>{{ end }}
+  </section>
+
+  <section class="cta-band" aria-labelledby="cta-heading">
+    <h2 id="cta-heading">{{ .Params.cta.title }}</h2>
+    <p>{{ .Params.cta.body }}</p>
+    <div class="btn-row">
+      <a class="btn btn-primary" href="mailto:{{ site.Params.email }}">{{ .Params.cta.primary }}</a>
+      {{ with $contact }}<a class="btn btn-secondary" href="{{ .RelPermalink }}">{{ $.Params.cta.secondary }}</a>{{ end }}
+    </div>
+  </section>
+{{ end }}

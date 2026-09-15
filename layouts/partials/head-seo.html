@@ -1,0 +1,51 @@
+{{- /*
+  Metaetiquetas SEO, Open Graph y canonical.
+
+  El canonical y los hreflang se construyen SIEMPRE desde params.canonicalBase
+  (domainsecurity.agency), nunca desde baseURL, porque baseURL cambia según el
+  despliegue: GitHub Actions lo sobreescribe con la URL de Pages y Cloudflare
+  Pages usaría la suya. Así las dos copias del sitio declaran la misma URL
+  canónica y no compiten como contenido duplicado.
+*/ -}}
+{{- $base := strings.TrimSuffix "/" (default site.BaseURL site.Params.canonicalBase) -}}
+{{- $canonical := printf "%s%s" $base .RelPermalink -}}
+{{- $title := cond .IsHome site.Title (printf "%s · %s" .Title site.Title) -}}
+{{- with .Params.seoTitle }}{{ $title = . }}{{ end -}}
+{{- $description := default site.Params.description .Description -}}
+{{- $ogImage := printf "%s/%s" $base (default site.Params.ogImage .Params.ogImage) -}}
+{{- $locale := cond (eq site.Language.Lang "es") "es_ES" "en_US" -}}
+
+<title>{{ $title }}</title>
+<meta name="description" content="{{ $description }}">
+<meta name="author" content="{{ site.Params.author }}">
+<link rel="canonical" href="{{ $canonical }}">
+
+{{- /* Alternativas de idioma, también ancladas al dominio canónico */}}
+{{ range .AllTranslations -}}
+<link rel="alternate" hreflang="{{ .Language.Lang }}" href="{{ printf "%s%s" $base .RelPermalink }}">
+{{ end -}}
+{{ with .Site.Home.AllTranslations -}}
+{{ range . }}{{ if eq .Language.Lang "en" }}<link rel="alternate" hreflang="x-default" href="{{ printf "%s%s" $base .RelPermalink }}">{{ end }}{{ end -}}
+{{ end }}
+
+<meta property="og:site_name" content="{{ site.Title }}">
+<meta property="og:type" content="{{ cond (eq .Kind "page") "article" "website" }}">
+<meta property="og:locale" content="{{ $locale }}">
+<meta property="og:title" content="{{ $title }}">
+<meta property="og:description" content="{{ $description }}">
+<meta property="og:url" content="{{ $canonical }}">
+<meta property="og:image" content="{{ $ogImage }}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="{{ site.Title }}">
+{{- if and (eq .Kind "page") (eq .Section "posts") }}
+<meta property="article:published_time" content="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">
+{{- with .Params.tags }}{{ range . }}
+<meta property="article:tag" content="{{ . }}">
+{{- end }}{{ end }}
+{{- end }}
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ $title }}">
+<meta name="twitter:description" content="{{ $description }}">
+<meta name="twitter:image" content="{{ $ogImage }}">

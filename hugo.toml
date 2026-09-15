@@ -1,0 +1,85 @@
+baseURL = "https://alvsec.github.io/"
+title = "Domain Security"
+defaultContentLanguage = "en"
+defaultContentLanguageInSubdir = false
+enableRobotsTXT = true
+
+[pagination]
+  pagerSize = 8
+
+[markup.goldmark.renderer]
+  unsafe = true
+
+[markup.highlight]
+  style = "monokai"
+  lineNos = true
+  codeFences = true
+  guessSyntax = true
+
+[taxonomies]
+  tag = "tags"
+
+[params]
+  author = "Álvaro Irún"
+  email = "domsec@keemail.me"
+  github = "https://github.com/alvsec"
+  # LinkedIn se retira a proposito: el perfil expone apellidos, historial
+  # laboral y red de contactos. El contacto profesional se facilita por
+  # correo o por CV, de forma individual. No volver a publicarlo aqui.
+  # Canonical siempre apunta a domainsecurity.agency, se sirva el sitio desde
+  # Cloudflare Pages o desde GitHub Pages, para evitar contenido duplicado.
+  # No se usa baseURL porque cambia según el despliegue.
+  # NOTA: a fecha de hoy el dominio todavía no está comprado y no resuelve.
+  # Es intencionado: apunta al destino final para no tener que tocarlo después.
+  canonicalBase = "https://domainsecurity.agency"
+  ogImage = "img/og-default.png"
+
+[languages]
+  [languages.en]
+    languageName = "English"
+    languageCode = "en"
+    weight = 1
+    contentDir = "content/en"
+    [languages.en.params]
+      description = "Security audits and penetration testing for small businesses, by Álvaro Irún. Hands-on offensive testing plus defensive configuration review."
+    [[languages.en.menus.main]]
+      name = "Services"
+      pageRef = "/services"
+      weight = 10
+    [[languages.en.menus.main]]
+      name = "Portfolio"
+      pageRef = "/portfolio"
+      weight = 20
+    [[languages.en.menus.main]]
+      name = "About"
+      pageRef = "/about"
+      weight = 30
+    [[languages.en.menus.main]]
+      name = "Contact"
+      pageRef = "/contact"
+      weight = 40
+
+  [languages.es]
+    languageName = "Español"
+    languageCode = "es"
+    weight = 2
+    contentDir = "content/es"
+    [languages.es.params]
+      description = "Auditorías de seguridad y test de intrusión para pymes, por Álvaro Irún. Pruebas ofensivas reales más revisión defensiva de la configuración."
+      ogImage = "img/og-es.png"
+    [[languages.es.menus.main]]
+      name = "Servicios"
+      pageRef = "/services"
+      weight = 10
+    [[languages.es.menus.main]]
+      name = "Portfolio"
+      pageRef = "/portfolio"
+      weight = 20
+    [[languages.es.menus.main]]
+      name = "Sobre mí"
+      pageRef = "/about"
+      weight = 30
+    [[languages.es.menus.main]]
+      name = "Contacto"
+      pageRef = "/contact"
+      weight = 40

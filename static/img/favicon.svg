@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" role="img" aria-label="Domain Security">
+  <rect width="48" height="48" rx="10" fill="#16202e"/>
+  <path d="M24 17v8M24 25H14.5v5.5M24 25h9.5v5.5" stroke="#faf9f7" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="24" cy="12" r="5.2" fill="#b45309"/>
+  <circle cx="14.5" cy="35" r="4.6" fill="#faf9f7"/>
+  <circle cx="33.5" cy="35" r="4.6" fill="#faf9f7"/>
+</svg>

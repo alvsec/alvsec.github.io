@@ -1,0 +1,21 @@
+# Despliegue en Cloudflare Workers con static assets.
+#
+# El sitio es estático: no hay código de Worker, sólo los archivos que genera
+# Hugo. Por eso no existe la clave "main", únicamente [assets].
+#
+# Cloudflare compila el sitio por su cuenta con el build command configurado en
+# el panel; "public" es la carpeta de salida de Hugo y está en .gitignore, así
+# que no se sube nada a mano.
+#
+# GitHub Pages ignora este archivo por completo, así que el despliegue a
+# alvsec.github.io sigue funcionando igual.
+
+name = "domain-security"
+compatibility_date = "2026-09-13"
+
+[assets]
+directory = "./public"
+# Sirve la 404.html que genera Hugo cuando la ruta no existe
+not_found_handling = "404-page"
+# Resuelve /services/ hacia /services/index.html, que es como publica Hugo
+html_handling = "auto-trailing-slash"

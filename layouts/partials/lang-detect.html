@@ -1,0 +1,54 @@
+{{- /*
+  Autodetección de idioma.
+
+  DOS GUARDAS IMPORTANTES, no las quites sin entender por qué están:
+
+  1. Sólo se emite en el sitio del idioma raíz (Home.RelPermalink == "/"), es
+     decir, en las páginas inglesas. NUNCA en /es/.
+     Motivo: Googlebot rastrea con "en-US". Si este script viviera también en
+     las páginas españolas, el rastreador sería redirigido fuera de /es/ y
+     Google podría acabar desindexando toda la versión en español, justo lo
+     contrario de lo que persiguen el canonical y los hreflang. Redirigir sólo
+     desde el punto de entrada por defecto basta para el objetivo: quien llega
+     a la raíz con el navegador en español aterriza en español.
+     Efecto secundario aceptado: quien abra un enlace /es/ con el navegador en
+     otro idioma se queda en español, que es lo correcto porque ese enlace se
+     le ha enviado a propósito.
+
+  2. Nunca en la página 404 (.Kind == "404"). Hugo publica /es/404.html como un
+     archivo real que el servidor entrega con HTTP 200; redirigir ahí convertiría
+     un 404 legítimo en un falso 200 y además perdería la URL que se pidió.
+
+  Sólo actúa en la primera visita: en cuanto alguien usa el selector se guarda
+  su elección en localStorage y esto no vuelve a moverlo nunca.
+
+  Lee los destinos de los propios <link rel="alternate" hreflang>, así que si se
+  añade un idioma en hugo.toml funciona solo. Salta a la ruta en el MISMO host,
+  porque los hreflang apuntan al dominio canónico y no queremos sacar a nadie
+  del dominio por el que ha entrado. Sin JavaScript no redirige.
+*/ -}}
+{{- if and (eq site.Home.RelPermalink "/") (ne .Kind "404") -}}
+<script>
+(function () {
+  try {
+    if (localStorage.getItem('ds-lang')) return;
+    var here = document.documentElement.lang;
+    if (!here) return;
+    var alts = {}, links = document.querySelectorAll('link[rel="alternate"][hreflang]');
+    for (var i = 0; i < links.length; i++) {
+      alts[links[i].getAttribute('hreflang')] = links[i].getAttribute('href');
+    }
+    var prefs = navigator.languages || [navigator.language || ''];
+    for (var j = 0; j < prefs.length; j++) {
+      var code = String(prefs[j]).toLowerCase().split('-')[0];
+      if (code === here) return;
+      if (alts[code]) {
+        var u = new URL(alts[code], location.href);
+        location.replace(u.pathname + location.search + location.hash);
+        return;
+      }
+    }
+  } catch (e) {}
+})();
+</script>
+{{- end -}}

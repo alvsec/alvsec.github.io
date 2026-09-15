@@ -1,0 +1,21 @@
+{{ define "main" }}
+{{- $es := eq site.Language.Lang "es" -}}
+  <article>
+    <header class="page-header">
+      <h1>{{ if $es }}Esta página no existe{{ else }}This page does not exist{{ end }}</h1>
+      <p class="lead">
+        {{ if $es }}El enlace está roto o el contenido se ha movido. No es culpa tuya.{{ else }}The link is broken or the content has moved. Not your fault.{{ end }}
+      </p>
+    </header>
+    <div class="page-content">
+      <p>{{ if $es }}Prueba desde alguno de estos sitios:{{ else }}Try one of these instead:{{ end }}</p>
+      <ul>
+        <li><a href="{{ site.Home.RelPermalink }}">{{ if $es }}Portada{{ else }}Home{{ end }}</a></li>
+        {{ with site.GetPage "/services" }}<li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>{{ end }}
+        {{ with site.GetPage "/portfolio" }}<li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>{{ end }}
+        <li><a href="{{ site.Home.RelPermalink }}posts/">{{ if $es }}Writeups del blog{{ else }}Blog writeups{{ end }}</a></li>
+        {{ with site.GetPage "/contact" }}<li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>{{ end }}
+      </ul>
+    </div>
+  </article>
+{{ end }}

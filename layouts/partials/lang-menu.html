@@ -1,0 +1,85 @@
+{{- /*
+  Selector de idioma.
+
+  Mejora progresiva: el HTML se sirve con la lista de idiomas visible y el
+  botón oculto, que es exactamente lo que había antes. El JavaScript añade la
+  clase .is-enhanced, y sólo entonces aparece el botón y la lista pasa a ser un
+  desplegable. Si el JS no se ejecuta, el selector sigue siendo utilizable.
+
+  La lista sale de .AllTranslations, así que añadir un idioma en hugo.toml lo
+  incorpora aquí sin tocar plantillas ni CSS.
+*/ -}}
+{{- $es := eq site.Language.Lang "es" -}}
+{{- $label := cond $es "Idiomas" "Languages" -}}
+<div class="lang-menu" data-lang-menu>
+  <button type="button" class="lang-toggle" aria-expanded="false" aria-controls="lang-list">
+    <span>{{ $label }} ({{ upper site.Language.Lang }})</span>
+    <svg class="lang-caret" viewBox="0 0 10 10" aria-hidden="true" focusable="false">
+      <path d="M3 1 L7 5 L3 9 Z" fill="currentColor"/>
+    </svg>
+  </button>
+  <ul class="lang-list" id="lang-list">
+    {{ range .AllTranslations }}
+      <li>
+        <a href="{{ .RelPermalink }}" lang="{{ .Language.Lang }}" hreflang="{{ .Language.Lang }}"
+           data-lang-choice="{{ .Language.Lang }}"
+           {{ if eq .Language.Lang site.Language.Lang }}aria-current="true"{{ end }}>{{ .Language.LanguageName }}</a>
+      </li>
+    {{ end }}
+  </ul>
+  <script>
+  (function () {
+    var root = document.currentScript.closest('.lang-menu');
+    var btn = root.querySelector('.lang-toggle');
+    var list = root.querySelector('.lang-list');
+    var items = list.querySelectorAll('a');
+
+    function open(yes) {
+      btn.setAttribute('aria-expanded', yes ? 'true' : 'false');
+      list.hidden = !yes;
+    }
+
+    /* A partir de aquí el botón existe y la lista pasa a ser desplegable */
+    root.classList.add('is-enhanced');
+    open(false);
+
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var wasOpen = btn.getAttribute('aria-expanded') === 'true';
+      open(!wasOpen);
+      if (!wasOpen && items.length) items[0].focus();
+    });
+
+    /* Al elegir idioma se recuerda, para que lang-detect no vuelva a mover */
+    for (var i = 0; i < items.length; i++) {
+      items[i].addEventListener('click', function () {
+        try { localStorage.setItem('ds-lang', this.getAttribute('data-lang-choice')); } catch (e) {}
+      });
+    }
+
+    list.addEventListener('keydown', function (e) {
+      var idx = Array.prototype.indexOf.call(items, document.activeElement);
+      if (idx < 0) return;
+      if (e.key === 'ArrowDown') { e.preventDefault(); items[(idx + 1) % items.length].focus(); }
+      if (e.key === 'ArrowUp') { e.preventDefault(); items[(idx - 1 + items.length) % items.length].focus(); }
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && btn.getAttribute('aria-expanded') === 'true') {
+        open(false);
+        btn.focus();
+      }
+    });
+
+    document.addEventListener('click', function (e) {
+      if (!root.contains(e.target)) open(false);
+    });
+
+    /* Al tabular más allá del último idioma, cerrar: si no, el menú se queda
+       abierto flotando sobre el contenido al que acaba de ir el foco */
+    root.addEventListener('focusout', function (e) {
+      if (!root.contains(e.relatedTarget)) open(false);
+    });
+  })();
+  </script>
+</div>

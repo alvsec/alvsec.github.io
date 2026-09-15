@@ -1,0 +1,7 @@
+{{- $es := eq site.Language.Lang "es" -}}
+<div class="contact-actions">
+  <a class="btn btn-primary" href="mailto:{{ site.Params.email }}">{{ if $es }}Escribir a {{ else }}Email {{ end }}{{ site.Params.email }}</a>
+  {{- with site.Params.github }}
+  <a class="btn btn-secondary" href="{{ . }}" target="_blank" rel="noopener">GitHub</a>
+  {{- end }}
+</div>

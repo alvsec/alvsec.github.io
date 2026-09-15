@@ -1,0 +1,11 @@
+<header class="site-header">
+  <div class="wrap wrap-wide">
+    <a class="brand" href="{{ site.Home.RelPermalink }}">{{ partial "logo.html" . }}<span class="brand-text">Domain <span class="mark">Security</span></span></a>
+    <nav class="main-nav" aria-label="{{ if eq site.Language.Lang "es" }}Navegación principal{{ else }}Main navigation{{ end }}">
+      {{ range site.Menus.main }}
+        <a href="{{ .URL }}"{{ if $.IsMenuCurrent "main" . }} class="active" aria-current="page"{{ end }}>{{ .Name }}</a>
+      {{ end }}
+      {{ partial "lang-menu.html" . }}
+    </nav>
+  </div>
+</header>

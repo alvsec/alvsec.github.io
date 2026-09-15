@@ -1,0 +1,12 @@
+{{ define "main" }}
+  <h1>{{ .Title }}</h1>
+  {{ .Content }}
+  <ul class="post-list">
+    {{ range .Paginator.Pages }}
+      {{ partial "post-card.html" . }}
+    {{ else }}
+      <li class="empty">{{ if eq $.Site.Language.Lang "es" }}Todavía no hay contenido aquí.{{ else }}Nothing here yet.{{ end }}</li>
+    {{ end }}
+  </ul>
+  {{ template "_internal/pagination.html" . }}
+{{ end }}

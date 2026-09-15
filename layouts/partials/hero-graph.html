@@ -1,0 +1,109 @@
+{{- /*
+  Cadena de intrusión interactiva.
+
+  Cinco pasos numerados sobre un grafo de red. Los números y el pie hacen que
+  se entienda sin pulsar nada; al pulsar un nodo se explica ese paso.
+
+  Sin librerías: SVG en línea y unas treinta líneas de JavaScript propio. Si el
+  navegador no ejecuta JS, se ve el paso 1 ya renderizado y cada nodo conserva
+  su <title>, que el navegador muestra al pasar el ratón y leen los lectores de
+  pantalla. El gráfico nunca queda inservible.
+
+  El texto de los pasos se edita aquí abajo.
+*/ -}}
+{{- $es := eq site.Language.Lang "es" -}}
+{{- $steps := slice -}}
+{{- if $es -}}
+  {{- $steps = slice
+    (dict "t" "Acceso inicial"        "d" "Alguien se conecta a la WiFi de invitados, o abre un correo con un archivo preparado.")
+    (dict "t" "Credenciales de usuario" "d" "Una contraseña débil o reutilizada abre la primera cuenta del dominio.")
+    (dict "t" "Movimiento lateral"    "d" "Esa cuenta permite saltar a otros equipos que comparten la misma contraseña.")
+    (dict "t" "Cuenta de servicio"    "d" "Una cuenta técnica con más permisos de los que necesita queda al alcance.")
+    (dict "t" "Control total"         "d" "Desde ahí se controla el dominio entero: todos los equipos, todos los datos y las copias de seguridad.")
+  -}}
+{{- else -}}
+  {{- $steps = slice
+    (dict "t" "Initial access"   "d" "Someone joins the guest WiFi, or opens an email with a prepared attachment.")
+    (dict "t" "User credentials" "d" "A weak or reused password opens the first account in the domain.")
+    (dict "t" "Lateral movement" "d" "That account allows hopping to other machines sharing the same password.")
+    (dict "t" "Service account"  "d" "A technical account holding more permissions than it needs comes within reach.")
+    (dict "t" "Full control"     "d" "From there the whole domain falls: every machine, every file and the backups.")
+  -}}
+{{- end -}}
+{{- $pos := slice (dict "x" 55 "y" 310 "r" 14) (dict "x" 130 "y" 230 "r" 14) (dict "x" 215 "y" 230 "r" 14) (dict "x" 175 "y" 140 "r" 14) (dict "x" 220 "y" 55 "r" 21) -}}
+{{- $label := cond $es "Cadena de intrusión en cinco pasos. Pulsa cada punto para ver en qué consiste." "A five step intrusion chain. Select each point to see what it involves." -}}
+
+<div class="hero-viz">
+  <svg class="hero-graph" viewBox="0 0 440 340" role="group" aria-label="{{ $label }}">
+    <g class="net-edge">
+      <path d="M220 55 L175 140M220 55 L270 140M220 55 L355 140"/>
+      <path d="M175 140 L130 230M175 140 L215 230M270 140 L300 230M355 140 L380 230"/>
+      <path d="M130 230 L55 310M130 230 L140 310M215 230 L225 310M300 230 L310 310M380 230 L390 310"/>
+    </g>
+    <g class="net-node">
+      <circle cx="140" cy="310" r="9"/><circle cx="225" cy="310" r="9"/>
+      <circle cx="310" cy="310" r="9"/><circle cx="390" cy="310" r="9"/>
+      <circle cx="300" cy="230" r="10"/><circle cx="380" cy="230" r="10"/>
+      <circle cx="270" cy="140" r="11"/><circle cx="355" cy="140" r="11"/>
+    </g>
+    {{/* La ruta del ataque. El tramo horizontal no sigue la jerarquía a
+         propósito: es el movimiento lateral. */}}
+    <path class="attack-path" d="M55 310 L130 230 L215 230 L175 140 L220 55"/>
+    {{ range $i, $p := $pos }}
+      {{- $s := index $steps $i -}}
+      <g class="step{{ if eq $i 0 }} is-active{{ end }}" tabindex="0" role="button"
+         data-title="{{ $s.t }}" data-desc="{{ $s.d }}"
+         aria-label="{{ printf "%d. %s" (add $i 1) $s.t }}" aria-pressed="{{ if eq $i 0 }}true{{ else }}false{{ end }}">
+        <title>{{ printf "%d. %s" (add $i 1) $s.t }}</title>
+        {{/* Área de pulsación invisible: en móvil los nodos quedan en unos
+            21px y el dedo necesita más. Con r=26 en el viewBox son unos 40px. */}}
+        <circle class="hit" cx="{{ $p.x }}" cy="{{ $p.y }}" r="26" fill="transparent"/>
+        <circle class="halo" cx="{{ $p.x }}" cy="{{ $p.y }}" r="{{ add $p.r 7 }}"/>
+        <circle class="dot" cx="{{ $p.x }}" cy="{{ $p.y }}" r="{{ $p.r }}"/>
+        <text x="{{ $p.x }}" y="{{ $p.y }}" text-anchor="middle" dy="0.36em">{{ add $i 1 }}</text>
+      </g>
+    {{ end }}
+  </svg>
+
+  <div class="hero-panel">
+    <p class="step-count" id="hero-count">{{ if $es }}Paso 1 de 5{{ else }}Step 1 of 5{{ end }}</p>
+    <h2 class="step-title" id="hero-title">{{ (index $steps 0).t }}</h2>
+    <p class="step-desc" id="hero-desc">{{ (index $steps 0).d }}</p>
+  </div>
+
+  <script>
+  (function () {
+    var viz = document.currentScript.closest('.hero-viz');
+    var nodes = viz.querySelectorAll('.step');
+    var count = viz.querySelector('#hero-count');
+    var title = viz.querySelector('#hero-title');
+    var desc = viz.querySelector('#hero-desc');
+    /* "Paso 1 de 5" -> "Paso {n} de 5", para no repetir el texto en dos idiomas */
+    var tpl = count.textContent.replace(/\d+/, '{n}');
+
+    function select(i) {
+      var node = nodes[i];
+      if (!node) return;
+      for (var j = 0; j < nodes.length; j++) {
+        nodes[j].classList.toggle('is-active', j === i);
+        nodes[j].setAttribute('aria-pressed', j === i ? 'true' : 'false');
+      }
+      count.textContent = tpl.replace('{n}', i + 1);
+      title.textContent = node.getAttribute('data-title');
+      desc.textContent = node.getAttribute('data-desc');
+    }
+
+    for (var i = 0; i < nodes.length; i++) {
+      (function (n, idx) {
+        n.addEventListener('click', function () { select(idx); });
+        n.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); select(idx); }
+        });
+      })(nodes[i], i);
+    }
+
+    viz.classList.add('is-interactive');
+    select(0);
+  })();
+  </script>
+</div>
