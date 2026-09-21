@@ -1,0 +1,68 @@
+{{- /*
+  Armazón propio de /webs/.
+
+  Existe como layouts/webs/baseof.html a propósito: al haber un baseof para
+  este type, Hugo NO usa el del sitio, así que esta página no hereda ni el
+  menú de Domain Security, ni el logo, ni el selector de idioma, ni el script
+  de autodetección de idioma. Queda aislada, que es justo lo que se busca.
+
+  Carga sólo su propio CSS. No usa static/css/style.css porque no comparte
+  ningún componente con el resto del sitio y serían 16 KB de reglas sin usar
+  en una página cuyo argumento de venta es que va rápida.
+*/ -}}
+{{- $base := strings.TrimSuffix "/" (default site.BaseURL site.Params.canonicalBase) -}}
+{{- $canonical := printf "%s%s" $base .RelPermalink -}}
+{{- $og := printf "%s/img/webs/og-webs.png" $base -}}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ .Title }}</title>
+  <meta name="description" content="{{ .Description }}">
+  <link rel="canonical" href="{{ $canonical }}">
+
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="es_ES">
+  <meta property="og:title" content="{{ .Title }}">
+  <meta property="og:description" content="{{ .Description }}">
+  <meta property="og:url" content="{{ $canonical }}">
+  <meta property="og:image" content="{{ $og }}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Páginas web para negocios de Gandía y La Safor">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ .Title }}">
+  <meta name="twitter:description" content="{{ .Description }}">
+  <meta name="twitter:image" content="{{ $og }}">
+
+  <link rel="stylesheet" href="{{ "css/webs.css" | absURL }}">
+  <link rel="icon" href="{{ "img/favicon.svg" | absURL }}" type="image/svg+xml">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "name": "Álvaro Irún, diseño y desarrollo de páginas web",
+    "description": {{ .Description | jsonify }},
+    "url": {{ $canonical | jsonify }},
+    "image": {{ $og | jsonify }},
+    "priceRange": "300-1200 EUR",
+    "currenciesAccepted": "EUR",
+    "founder": { "@type": "Person", "name": "Álvaro Irún" },
+    "provider": { "@type": "Person", "name": "Álvaro Irún" },
+    "areaServed": [
+      { "@type": "City", "name": "Gandía" },
+      { "@type": "AdministrativeArea", "name": "La Safor" },
+      { "@type": "AdministrativeArea", "name": "Valencia" }
+    ],
+    "knowsLanguage": "es",
+    "serviceType": "Diseño y desarrollo de páginas web para pequeños negocios"
+  }
+  </script>
+</head>
+<body>
+  <a class="saltar" href="#contenido">Saltar al contenido</a>
+  {{ block "main" . }}{{ end }}
+</body>
+</html>

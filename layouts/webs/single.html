@@ -1,0 +1,86 @@
+{{ define "main" }}
+{{- $wa := printf "https://wa.me/%s?text=%s" .Params.whatsapp (urlquery "Hola Alvaro, te escribo por la pagina de webs") -}}
+
+  <header class="cabecera">
+    <div class="caja">
+      <p class="nombre">{{ .Params.hero.name }}</p>
+      <h1>{{ .Params.hero.role }}</h1>
+      <p class="entrada">{{ .Params.hero.intro }}</p>
+      <a class="wa" href="{{ $wa }}" target="_blank" rel="noopener">{{ .Params.hero.cta }}</a>
+    </div>
+  </header>
+
+  <main id="contenido">
+
+    <section class="caja bloque" aria-labelledby="t-incluye">
+      <h2 id="t-incluye">{{ .Params.incluye.title }}</h2>
+      <ul class="lista">
+        {{ range .Params.incluye.items }}<li>{{ . }}</li>{{ end }}
+      </ul>
+    </section>
+
+    <section class="caja bloque" aria-labelledby="t-trabajos">
+      <h2 id="t-trabajos">{{ .Params.trabajos.title }}</h2>
+      <p class="intro">{{ .Params.trabajos.intro }}</p>
+      {{ range $i, $t := .Params.trabajos.items }}
+        <article class="trabajo">
+          <img src="{{ printf "img/webs/%s" $t.imagen | absURL }}"
+               alt="{{ $t.alt }}" width="1280" height="800"
+               {{ if $i }}loading="lazy"{{ else }}fetchpriority="high"{{ end }}
+               decoding="async">
+          <div class="trabajo-texto">
+            <h3>
+              {{ $t.nombre }}
+              <span class="etiqueta etiqueta-{{ $t.tipo }}">{{ $t.etiqueta }}</span>
+            </h3>
+            <p class="enlace">
+              {{- with $t.url -}}
+                <a href="{{ . }}" target="_blank" rel="noopener">{{ $t.enlace_texto }}</a>
+              {{- else -}}
+                {{ $t.enlace_texto }}
+              {{- end -}}
+            </p>
+            <p>{{ $t.hice }}</p>
+            <p class="para-que">{{ $t.sirve }}</p>
+          </div>
+        </article>
+      {{ end }}
+    </section>
+
+    <section class="caja bloque" aria-labelledby="t-precios">
+      <h2 id="t-precios">{{ .Params.precios.title }}</h2>
+      <div class="precios">
+        {{ range .Params.precios.items }}
+          <div class="precio">
+            <h3>{{ .nombre }}</h3>
+            <p class="cifra">{{ .desde }}</p>
+            <p>{{ .texto }}</p>
+          </div>
+        {{ end }}
+      </div>
+      <p class="pago-unico">{{ .Params.precios.nota }}</p>
+      <p class="nota">{{ .Params.precios.nota_dominio }}</p>
+    </section>
+
+    <section class="caja bloque" aria-labelledby="t-proceso">
+      <h2 id="t-proceso">{{ .Params.proceso.title }}</h2>
+      <ol class="pasos">
+        {{ range .Params.proceso.pasos }}<li>{{ . }}</li>{{ end }}
+      </ol>
+    </section>
+
+    <section class="caja bloque cierre" aria-labelledby="t-cierre">
+      <h2 id="t-cierre">{{ .Params.cierre.title }}</h2>
+      <p>{{ .Params.cierre.texto }}</p>
+      <a class="wa" href="{{ $wa }}" target="_blank" rel="noopener">{{ .Params.cierre.cta }}</a>
+      <p class="correo">o por correo: <a href="mailto:{{ .Params.email }}">{{ .Params.email }}</a></p>
+    </section>
+
+  </main>
+
+  <footer class="pie">
+    <div class="caja">
+      <a href="{{ .Params.pie.enlace }}">{{ .Params.pie.texto }}</a>
+    </div>
+  </footer>
+{{ end }}

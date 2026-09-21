@@ -12,6 +12,10 @@ description: "Legal notice and privacy policy for Domain Security. No third part
   registration as a self employed worker in Spain. That is why it carries no
   tax ID and no registered address.
 
+  NOTE: since /webs/ exists, web design rates are published. That is still not
+  economic activity, because nothing is charged or contracted through the site,
+  but it moves the threshold much closer.
+
   THE MOMENT A FIRST INVOICE IS ISSUED TO A CLIENT, this page is no longer
   enough and must be rewritten. Article 10 of the Spanish LSSI-CE requires
   anyone providing information society services for profit to publish their
@@ -35,7 +39,7 @@ Contact email: [domsec@keemail.me](mailto:domsec@keemail.me)
 
 Domain Security is currently a **personal technical publishing project and professional portfolio**. Its purpose is to publish the author's own technical work and describe the services he is qualified to provide.
 
-This site **carries out no economic activity**: it sells nothing, has no payment gateway, does not allow services to be booked online and issues no invoices. Any professional engagement, should one arise, is agreed and formalised away from this website, in writing and individually.
+This site **has no payment gateway and nothing can be booked or paid for online**, and no invoices are issued from here. The [web design page](/webs/), in Spanish, publishes starting rates for information only, so that anyone enquiring knows the order of magnitude in advance. Any engagement is agreed and formalised away from this website, in writing and individually.
 
 ## Cookies
 

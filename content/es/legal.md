@@ -11,6 +11,10 @@ description: "Aviso legal y política de privacidad de Domain Security. Sitio si
   portfolio y divulgación, SIN actividad económica, sin facturación y sin alta
   en el régimen de autónomos. Por eso no incluye NIF ni domicilio fiscal.
 
+  OJO: desde que existe /webs/ se publican tarifas de diseño web. Eso todavia
+  no es actividad economica, porque no se cobra ni se contrata desde el sitio,
+  pero acerca mucho el umbral.
+
   EN EL MOMENTO EN QUE SE EMITA LA PRIMERA FACTURA A UN CLIENTE, esta página
   se queda corta y hay que rehacerla. El artículo 10 de la LSSI-CE obliga a
   quien presta servicios de la sociedad de la información con ánimo de lucro a
@@ -34,7 +38,7 @@ Correo de contacto: [domsec@keemail.me](mailto:domsec@keemail.me)
 
 Domain Security es, a día de hoy, un **proyecto personal de divulgación técnica y portfolio profesional**. Su finalidad es publicar trabajo técnico propio y describir los servicios que su autor está capacitado para prestar.
 
-Este sitio **no realiza actividad económica**: no vende nada, no tiene pasarela de pago, no permite contratar servicios en línea y no emite facturas. Cualquier encargo profesional, si llega a producirse, se acuerda y se formaliza fuera de esta web, por escrito y de forma individual.
+Este sitio **no dispone de pasarela de pago ni permite contratar ni pagar nada en línea**, y no emite facturas desde aquí. En la página de [diseño web](/webs/) se publican tarifas de partida a título informativo, para que quien pregunte sepa de antemano el orden de magnitud. Cualquier encargo se acuerda y se formaliza fuera de esta web, por escrito y de forma individual.
 
 ## Cookies
 
