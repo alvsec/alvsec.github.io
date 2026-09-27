@@ -98,8 +98,8 @@ img { max-width: 100%; height: auto; }
 .brand:hover { color: var(--fg); text-decoration: none; }
 .brand .mark { color: var(--accent); }
 .brand-mark {
-  width: 1.75rem;
-  height: 1.75rem;
+  width: 2rem;
+  height: 2rem;
   display: block;
   flex: none;
 }

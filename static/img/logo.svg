@@ -1,0 +1,61 @@
+<!--
+  Logo de Domain Security. Diseño de Álvaro Irún.
+
+  Se usa a la vez como favicon y como marca de la cabecera, a propósito: al ser
+  el mismo archivo el navegador lo descarga una sola vez y sirve para los dos.
+
+  Se usa la version CON circulo de fondo, no la transparente. La transparente
+  tiene el arco superior izquierdo y la mitad izquierda del escudo casi blancos
+  (#F1F3F7, #FFFFFF), asi que desaparecen sobre el fondo del sitio (#faf9f7) y
+  el logo se ve partido. Comprobado.
+
+  Se han eliminado los metadatos C2PA del original: ocupaban unos 15 KB en
+  base64, mas de cinco veces el peso del dibujo, en un archivo que carga en
+  todas las paginas.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1254 1254" width="1254" height="1254">
+  <defs>
+    <radialGradient id="orange" cx="0.35" cy="0.3" r="0.8">
+      <stop offset="0" stop-color="#FA9A1C"/><stop offset="1" stop-color="#C85200"/>
+    </radialGradient>
+    <linearGradient id="ringL" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#F1F3F7"/><stop offset="1" stop-color="#6B7B9A"/>
+    </linearGradient>
+    <linearGradient id="ringR" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5E7092"/><stop offset="1" stop-color="#1D2A45"/>
+    </linearGradient>
+    <linearGradient id="ringB" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#9AA6BF"/><stop offset="0.5" stop-color="#3E5172"/><stop offset="1" stop-color="#1F2C48"/>
+    </linearGradient>
+    <linearGradient id="outline" gradientUnits="userSpaceOnUse" x1="500" y1="480" x2="760" y2="800">
+      <stop offset="0" stop-color="#F6F7FA"/><stop offset="0.55" stop-color="#E2E6EE"/><stop offset="1" stop-color="#7F8CA8"/>
+    </linearGradient>
+    <linearGradient id="shieldL" x1="0" y1="0" x2="0.4" y2="1">
+      <stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#D3D8E2"/>
+    </linearGradient>
+    <linearGradient id="shieldR" x1="0.6" y1="0" x2="0.3" y2="1">
+      <stop offset="0" stop-color="#6B7A97"/><stop offset="1" stop-color="#26324D"/>
+    </linearGradient>
+    <radialGradient id="node" cx="0.4" cy="0.35" r="0.75">
+      <stop offset="0" stop-color="#FFFFFF"/><stop offset="0.6" stop-color="#E4E7EE"/><stop offset="1" stop-color="#B9C2D4"/>
+    </radialGradient>
+  </defs>
+  <circle cx="627" cy="627" r="560" fill="#0B1321"/>
+  <g fill="none" stroke-width="38" stroke-linecap="butt">
+    <path d="M550.1 395.7 A249 249 0 0 0 383.7 694.9" stroke="url(#ringL)"/>
+    <path d="M699.9 395.7 A249 249 0 0 1 866.3 694.9" stroke="url(#ringR)"/>
+    <path d="M452.1 812.1 A249 249 0 0 0 797.9 812.1" stroke="url(#ringB)"/>
+  </g>
+  <g stroke-width="22" stroke-linecap="butt">
+    <line x1="625" y1="395" x2="625" y2="486" stroke="#F3F5F8"/>
+    <line x1="405" y1="764" x2="503" y2="694" stroke="#EEF0F5"/>
+    <line x1="845" y1="764" x2="747" y2="694" stroke="#DDE2EA"/>
+  </g>
+  <path d="M625 484 L500 541 L500 650 C500 705 555 752 625 791 C695 752 750 705 750 650 L750 541 Z"
+        fill="none" stroke="url(#outline)" stroke-width="29" stroke-linejoin="miter"/>
+  <path d="M625 533 L537 572 L537 642 C537 690 572 722 625 748 Z" fill="url(#shieldL)"/>
+  <path d="M625 533 L713 572 L713 642 C713 690 678 722 625 748 Z" fill="url(#shieldR)"/>
+  <circle cx="625" cy="344" r="57" fill="url(#orange)"/>
+  <circle cx="378" cy="783" r="58" fill="url(#node)"/>
+  <circle cx="873" cy="783" r="58" fill="url(#node)"/>
+</svg>

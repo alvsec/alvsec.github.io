@@ -59,18 +59,20 @@ def pick(candidates):
 BOLD, REG = pick(BOLD_CANDIDATES), pick(REG_CANDIDATES)
 
 
-def node_tree(d, cx, cy, s, line, root, leaf, w):
-    """La marca: árbol de dominio, raíz arriba y dos hojas abajo."""
-    ry, ly = cy - s, cy + s
-    lx1, lx2 = cx - s, cx + s
-    d.line([(cx, ry), (cx, cy)], fill=line, width=w)
-    d.line([(lx1, cy), (lx2, cy)], fill=line, width=w)
-    d.line([(lx1, cy), (lx1, ly)], fill=line, width=w)
-    d.line([(lx2, cy), (lx2, ly)], fill=line, width=w)
-    r1, r2 = int(s * 0.42), int(s * 0.36)
-    d.ellipse([cx - r1, ry - r1, cx + r1, ry + r1], fill=root)
-    for x in (lx1, lx2):
-        d.ellipse([x - r2, ly - r2, x + r2, ly + r2], fill=leaf)
+LOGO = os.path.join(os.path.dirname(__file__), "logo-mark.png")
+
+
+def paste_logo(img, cx, cy, size, opacity=1.0):
+    """Pega el logo (tools/logo-mark.png) centrado en cx,cy con lado `size`.
+
+    El PNG es el SVG de static/img/logo.svg rasterizado y recortado a su
+    circulo, con canal alfa. Si cambias el logo, vuelve a generarlo.
+    """
+    mark = Image.open(LOGO).convert("RGBA").resize((size, size), Image.LANCZOS)
+    if opacity < 1.0:
+        a = mark.getchannel("A").point(lambda v: int(v * opacity))
+        mark.putalpha(a)
+    img.paste(mark, (cx - size // 2, cy - size // 2), mark)
 
 
 # nombre de archivo -> (línea 1, línea 2, subtítulo)
@@ -106,12 +108,12 @@ def build(name, l1, l2, sub):
     d.rectangle([14, 0, W - 1, H - 1], outline=BORDER, width=1)
 
     x = 78
-    node_tree(d, x + 19, 88, 19, FG, ACCENT, FG, 4)  # marca
+    paste_logo(img, x + 22, 88, 44)  # marca
 
     brand_f = ImageFont.truetype(BOLD, 34)
-    d.text((x + 58, 71), "DOMAIN", font=brand_f, fill=FG)
+    d.text((x + 60, 71), "DOMAIN", font=brand_f, fill=FG)
     bw = d.textlength("DOMAIN ", font=brand_f)
-    d.text((x + 58 + bw, 71), "SECURITY", font=brand_f, fill=ACCENT)
+    d.text((x + 60 + bw, 71), "SECURITY", font=brand_f, fill=ACCENT)
 
     head_f = ImageFont.truetype(BOLD, 62)
     d.text((x, 196), l1, font=head_f, fill=FG)
@@ -146,16 +148,16 @@ def build_banner(name="linkedin-cover.png"):
     d = ImageDraw.Draw(img)
 
     # Marca de agua grande y muy tenue a la derecha
-    node_tree(d, 1285, 198, 104, (34, 47, 66), (43, 58, 79), (34, 47, 66), 12)
+    paste_logo(img, 1290, 198, 250, opacity=0.22)  # marca de agua
     d.rectangle([0, 0, bw, 7], fill=ACCENT)
 
     x = 430
-    node_tree(d, x + 26, 128, 26, BG, ACCENT, BG, 5)
+    paste_logo(img, x + 28, 128, 58)
 
     brand_f = ImageFont.truetype(BOLD, 44)
-    d.text((x + 76, 106), "DOMAIN", font=brand_f, fill=BG)
+    d.text((x + 74, 106), "DOMAIN", font=brand_f, fill=BG)
     bwid = d.textlength("DOMAIN ", font=brand_f)
-    d.text((x + 76 + bwid, 106), "SECURITY", font=brand_f, fill=ACCENT)
+    d.text((x + 74 + bwid, 106), "SECURITY", font=brand_f, fill=ACCENT)
 
     d.text((x, 200), BANNER_SUB, font=ImageFont.truetype(REG, 29), fill=(169, 180, 195))
     d.rectangle([x, 258, x + 78, 263], fill=ACCENT)

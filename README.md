@@ -83,9 +83,15 @@ arriba del todo, en `whatsapp` y `email`.
 
 ### Añadir un trabajo nuevo
 
-1. Guarda la captura en `static/img/webs/` en **WebP a 1280x800**. Si tienes
-   un PNG, conviértelo con `python3 -c "from PIL import Image;
-   Image.open('x.png').convert('RGB').save('static/img/webs/x.webp','WEBP',quality=82)"`.
+1. Guarda la captura en `static/img/webs/` en **WebP a 1280x800 y calidad 80**:
+
+       python3 -c "from PIL import Image; im=Image.open('x.png').convert('RGB'); \
+       im.resize((1280,800), Image.LANCZOS).save('static/img/webs/x.webp','WEBP',quality=80,method=6)"
+
+   **Comprueba el peso.** Una captura con fotos debe quedar en torno a 100 KB
+   y una plana por debajo de 50 KB. Exportar directamente desde el navegador
+   suele dar 400 a 800 KB, que es entre cuatro y ocho veces más de lo
+   necesario y se carga el argumento de velocidad de la página.
 2. Añade un bloque a `trabajos.items` en `content/es/webs.md` copiando uno
    existente. Los campos son: `nombre`, `url` (vacío si no hay web pública),
    `enlace_texto`, `etiqueta`, `tipo` (`cliente` o `propio`, controla el color
@@ -111,3 +117,31 @@ paleta en uno, cámbiala también en el otro.**
 
 Igual que el resto del sitio: `git add -A`, `git commit` y `git push`. GitHub
 Actions y Cloudflare compilan cada uno por su cuenta. No se sube nada a mano.
+
+## El logo
+
+`static/img/logo.svg` es **un único archivo que hace de favicon y de marca de
+cabecera a la vez**. Al ser el mismo recurso, el navegador lo descarga una sola
+vez y sirve para los dos usos. Lo referencian:
+
+    layouts/_default/baseof.html    favicon del sitio
+    layouts/webs/baseof.html        favicon de /webs/
+    layouts/partials/logo.html      marca de la cabecera, como <img>
+
+Se usa la versión **con círculo de fondo**, no la transparente. La transparente
+tiene el arco superior izquierdo y la mitad izquierda del escudo casi blancos,
+así que desaparecen sobre el fondo del sitio y el logo se ve partido. La de
+fondo oscuro se lee bien incluso a 16px.
+
+Si cambias el logo, hay que hacer **tres** cosas:
+
+1. Sustituir `static/img/logo.svg`. Quítale los metadatos C2PA si los lleva:
+   en el original ocupaban unos 15 KB en base64, más de cinco veces el peso
+   del dibujo, en un archivo que carga en todas las páginas.
+2. Regenerar `tools/logo-mark.png`, que es el SVG rasterizado y recortado a su
+   círculo con canal alfa. Es lo que usan las imágenes Open Graph.
+3. Ejecutar `python3 tools/generate-og-images.py` para rehacer las cuatro
+   imágenes de vista previa y la portada de LinkedIn.
+
+El tamaño en cabecera está en `.brand-mark` dentro de `static/css/style.css`.
+Está a 2rem: por debajo de eso el escudo y el anillo se empastan.
